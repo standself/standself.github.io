@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <meta name="description" content="things about front-end" />
+  
+
+  
+  
+  
+  
+  
+  
+  <title>Vue组件开发初探 | standself</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="&amp;emsp;&amp;emsp;好不容易wings项目上线，终于可以松口气了。刚好赶上组里面hy通知大家，mtue组件库需要在六月底完成初版；而六月中旬才完成了三四个组件。于是自告奋勇去认领面包屑组件，然而，虽然组件尚未完工，但已经被认领完了；hy也是说我可以自己练习。那我就自己练习了吧，截至目前为止，大大小小的组件已经尝试过很多了，例如breadcrumb、check-box、radio、dropdow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue组件开发初探">
+<meta property="og:url" content="http://yoursite.com/2017/07/17/Vue组件开发初探/index.html">
+<meta property="og:site_name" content="standself">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;好不容易wings项目上线，终于可以松口气了。刚好赶上组里面hy通知大家，mtue组件库需要在六月底完成初版；而六月中旬才完成了三四个组件。于是自告奋勇去认领面包屑组件，然而，虽然组件尚未完工，但已经被认领完了；hy也是说我可以自己练习。那我就自己练习了吧，截至目前为止，大大小小的组件已经尝试过很多了，例如breadcrumb、check-box、radio、dropdow">
+<meta property="og:updated_time" content="2017-07-17T03:46:31.175Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vue组件开发初探">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp;好不容易wings项目上线，终于可以松口气了。刚好赶上组里面hy通知大家，mtue组件库需要在六月底完成初版；而六月中旬才完成了三四个组件。于是自告奋勇去认领面包屑组件，然而，虽然组件尚未完工，但已经被认领完了；hy也是说我可以自己练习。那我就自己练习了吧，截至目前为止，大大小小的组件已经尝试过很多了，例如breadcrumb、check-box、radio、dropdow">
+  
+  
+    <link rel="icon" href="/css/images/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+  
+  <!-- baidu webmaster push -->
+  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+</head>
+<body class="home blog custom-background custom-font-enabled single-author">
+  <div id="page" class="hfeed site">
+      <header id="masthead" class="site-header" role="banner">
+    <hgroup>
+      <h1 class="site-title">
+        <a href="/" title="standself" rel="home">standself</a>
+      </h1>
+      
+        <h2 class="site-description">
+          <a href="/" id="subtitle">To be a better man</a>
+        </h2>
+      
+    </hgroup>
+
+    <nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle">菜单</button>
+            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
+            <div class="menu-main-container">
+                <ul id="menu-main" class="nav-menu">
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
+                
+                </ul>
+            </div>
+    </nav>
+</header>
+      <div id="main" class="wrapper">
+        <div id="primary" class="site-content"><div id="content" role="main"><article id="post-Vue组件开发初探" class="post-Vue组件开发初探 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title article-title">
+      Vue组件开发初探
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://yoursite.com/2017/07/17/Vue组件开发初探/" data-id="cj57t9i5c0002y0srjnbari0k" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>&emsp;&emsp;好不容易wings项目上线，终于可以松口气了。刚好赶上组里面hy通知大家，mtue组件库需要在六月底完成初版；而六月中旬才完成了三四个组件。于是自告奋勇去认领面包屑组件，然而，虽然组件尚未完工，但已经被认领完了；hy也是说我可以自己练习。那我就自己练习了吧，截至目前为止，大大小小的组件已经尝试过很多了，例如breadcrumb、check-box、radio、dropdown、inputNumber、steps、tabs等。作为前端新手小白，适时总结终归是有好处的。在组件制作过程中，vue是有着得天独厚的优势的，其本身的vue单组件文件就已经明显摆明了这一事实（其实就是本人接触的东西太少。。。）。所以，我就以新手的身份总结一下我为数不多的经验。<br><a id="more"></a></p>
+<h3 id="数据驱动视图"><a href="#数据驱动视图" class="headerlink" title="数据驱动视图"></a>数据驱动视图</h3><p>&emsp;&emsp;Vue是MV*M框架，特色是defineProperty下的数据-视图双向绑定。所以，根据官方文档推荐的，在使用Vue的过程中，你不应该使用 js 操作DOM；取而代之的是，你要想着，data-driven view change。首先，最基本的，使用v-show和v-if，来实现提醒框的可见切换，v-show/if的判定就需要根据数据来实现。其次，对于使用css实现状态切换的，应该是给HTML元素添加对于的类，同样是根据数据来判断该类存不存在，如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">// isVisible</div><div class="line">&lt;template :class=&apos;isVisible ? &quot;show&quot; : &quot;hide&quot;&apos;&gt;&lt;/template&gt;</div><div class="line">// 有多个类时, 注意color也是 data;对象形式也可以.</div><div class="line">&lt;template :class=&apos;[</div><div class="line">        isVisible ? &quot;show&quot; : &quot;hide&quot;,</div><div class="line">        isLarge ? &apos;large&apos; : &apos;default&apos;,</div><div class="line">        color,</div><div class="line">        &#123;</div><div class="line">            &quot;show&quot;: isVisible,</div><div class="line">            &quot;large&quot;: isLarge,</div><div class="line">        &#125;</div><div class="line">    ]&apos;&gt;</div><div class="line">&lt;/template&gt;</div><div class="line">// 根据这个方法，涉及到元素attribute的数据驱动改变，都是能够实现的，再举例子的话如：</div><div class="line">data () &#123; </div><div class="line">    return &#123;</div><div class="line">        disabled: false,</div><div class="line">    &#125;;</div><div class="line">&#125;</div><div class="line">&lt;input :disabled=&apos;disabled&apos;&gt;</div></pre></td></tr></table></figure></p>
+<h3 id="组件的构建模型"><a href="#组件的构建模型" class="headerlink" title="组件的构建模型"></a>组件的构建模型</h3><p>&emsp;&emsp;上面是视图状态切换的初始经验。而在思考组件的构建模式时，我认为有 2 种模式，1）基于数据的完全渲染；2）基于slot的内容分发.</p>
+<ul>
+<li>基于数据的完全渲染</li>
+</ul>
+<p>&emsp;&emsp;对于第一种，一般是在有很多相关数据进行填充HTML的情况下，比如级联选择框组件和表格组件；定义一个标准数据结构，开发者基于该数据结构进行组件开发；用户使用时，直接填充即可。详细可看element的级联选择框组件；（不过在element中，级联选择框似乎是用户点击后实时构建添加到document中的，他们似乎是为了避免的组件的自我嵌套; 这个后面有涉及到）。举个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">// data</div><div class="line">show: false,</div><div class="line">current: 0,</div><div class="line">options: [&#123;</div><div class="line">    value: &apos;zhinan&apos;,</div><div class="line">    label: &apos;指南&apos;,</div><div class="line">    children: [&#123;</div><div class="line">        value: &apos;shejiyuanze&apos;,</div><div class="line">        label: &apos;设计原则&apos;,</div><div class="line">        children: [&#123;</div><div class="line">            value: &apos;yizhi&apos;,</div><div class="line">            label: &apos;一致&apos;</div><div class="line">            &#125;, &#123;</div><div class="line">            value: &apos;fankui&apos;,</div><div class="line">            label: &apos;反馈&apos;</div><div class="line">            &#125;,</div><div class="line">        ]&#125;, &#123;</div><div class="line">        value: &apos;daohang&apos;,</div><div class="line">        label: &apos;导航&apos;,</div><div class="line">        children: [&#123;</div><div class="line">            value: &apos;cexiangdaohang&apos;,</div><div class="line">            label: &apos;侧向导航&apos;</div><div class="line">            &#125;, &#123;</div><div class="line">            value: &apos;dingbudaohang&apos;,</div><div class="line">            label: &apos;顶部导航&apos;</div><div class="line">        &#125;]</div><div class="line">    &#125;]</div><div class="line">&#125;];</div><div class="line"></div><div class="line">// element</div><div class="line">&lt;template&gt;</div><div class="line">    &lt;div class=&apos;cascader&apos;&gt;</div><div class="line">        &lt;ul&gt;</div><div class="line">            &lt;li v-for=&apos;(option, index) in options&apos;</div><div class="line">                :value=&apos;option.value&apos;</div><div class="line">                :class=&apos;[</div><div class="line">                    option.children ? &quot;more&quot; : &quot;&quot;,</div><div class="line">                    index === current ? &quot;current&quot; : &quot;&quot;,</div><div class="line">                ]&apos;</div><div class="line">                @click=&apos;handleClick(index, option)&apos;</div><div class="line">            &gt;</div><div class="line">                &#123;&#123; option.label &#125;&#125;</div><div class="line">            &lt;/li&gt;</div><div class="line">        &lt;/ul&gt;</div><div class="line">        </div><div class="line">        &lt;Cascader</div><div class="line">            v-if=&apos;show &amp;&amp; options[current].children&apos;</div><div class="line">            :options=&apos;options[current].children&apos;</div><div class="line">        &gt;&lt;/Cascader&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/template&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li>基于slot的内容分发</li>
+</ul>
+<p>&emsp;&emsp;根据官网上，slot才是组件开发的主力。缘何？依我这个新手的看法，slot给予组件很大的便利性，组件模版下的未知内容均可以填充到slot里面去，更何况还有具名slot这一利器；你不仅可以填充未知内容，还能根据子组件name填充到对应的部位去！！！完全可以实现组件结构的定制化或者说很大程度上的用户私有话。以上述的cascader为例。它是无法进行扩充的，它只能进行显示，不能交互；如果要实现交互的话，还得在外面套层父容器添加交互组件。而有slot就好办了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">// 定义模版</div><div class="line">&lt;template&gt;</div><div class="line">    &lt;div class=&apos;cascader&apos;&gt;</div><div class="line">        &lt;slot name=&apos;input&apos;&gt;&lt;/slot&gt;</div><div class="line">        &lt;ul&gt;</div><div class="line">            &lt;li&gt;&#123;&#123; option.label &#125;&#125;&lt;/li&gt;</div><div class="line">        &lt;/ul&gt;</div><div class="line">        &lt;Cascader&gt;&lt;/Cascader&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/template&gt;</div><div class="line"></div><div class="line">// 使用,用户没有填充</div><div class="line">&lt;Cascader&gt;&lt;/Cascader&gt;</div><div class="line"></div><div class="line">//用户没有填充内容时, 渲染为：</div><div class="line">&lt;div class=&apos;cascader&apos;&gt;</div><div class="line">    &lt;ul&gt;</div><div class="line">        &lt;li&gt;指南&lt;/li&gt;</div><div class="line">    &lt;/ul&gt;</div><div class="line">    &lt;div class=&apos;cascader&apos;&gt;</div><div class="line">        &lt;ul&gt;</div><div class="line">            &lt;li&gt;设计原则&lt;/li&gt;</div><div class="line">            &lt;li&gt;导航&lt;/li&gt;</div><div class="line">        &lt;/ul&gt;</div><div class="line">        &lt;div class=&apos;cascader&apos;&gt;</div><div class="line">            &lt;ul&gt;</div><div class="line">                &lt;li&gt;一致&lt;/li&gt;</div><div class="line">                &lt;li&gt;反馈&lt;/li&gt;</div><div class="line">            &lt;/ul&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line">//使用，用户填充内容</div><div class="line">&lt;Cascader&gt;</div><div class="line">    &lt;input type=&apos;text&apos; slot=&apos;input&apos; /&gt;</div><div class="line">&lt;/Cascader&gt;</div><div class="line"></div><div class="line">// 渲染为</div><div class="line">&lt;div class=&apos;cascader&apos;&gt;</div><div class="line">    &lt;input type=&apos;text&apos; /&gt;</div><div class="line">    &lt;ul&gt;</div><div class="line">        &lt;li&gt;指南&lt;/li&gt;</div><div class="line">    &lt;/ul&gt;</div><div class="line">    &lt;div class=&apos;cascader&apos;&gt;</div><div class="line">        &lt;ul&gt;</div><div class="line">            &lt;li&gt;设计原则&lt;/li&gt;</div><div class="line">            &lt;li&gt;导航&lt;/li&gt;</div><div class="line">        &lt;/ul&gt;</div><div class="line">        &lt;div class=&apos;cascader&apos;&gt;</div><div class="line">            &lt;ul&gt;</div><div class="line">                &lt;li&gt;一致&lt;/li&gt;</div><div class="line">                &lt;li&gt;反馈&lt;/li&gt;</div><div class="line">            &lt;/ul&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
+<h3 id="父子组件的通信"><a href="#父子组件的通信" class="headerlink" title="父子组件的通信"></a>父子组件的通信</h3><p>&emsp;&emsp;最直观的，通过props直接给子组件传递数据，子组件开箱即用。但是，这种方式只能是单向的，由父组件传递数据到子组件中，而且只是一次。那么，是否有其他方法？答案是使用事件机制。譬如v-model，其实就是一个事件机制，它监听了组件的inpupt事件。那么如何使用事件机制进行父子组件间的通信呢？</p>
+<blockquote>
+<p>props的使用，要带 ：冒号才能实现可变对象，否则是字符串形式。</p>
+</blockquote>
+<ul>
+<li>父组件向子组件传递消息</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">// 方法一, 在子组件中</div><div class="line">this.$on(&apos;parent&apos;, (msg) =&gt; &#123;</div><div class="line">    console.log(msg); // &apos;msg from parent&apos;</div><div class="line">&#125;);  </div><div class="line">// 方法一，在父组件中</div><div class="line">this.$children.$emit(&apos;parent&apos;, &apos;msg from parent&apos;);</div><div class="line"></div><div class="line">// 方法二, 在子组件中</div><div class="line">this.$parent.on(&apos;parent&apos;, (msg) =&gt; &#123;</div><div class="line">    console.log(msg); // &apos;msg from parent&apos;;</div><div class="line">&#125;);</div><div class="line">// 方法二，在父组件中</div><div class="line">this.$emit(&apos;parent&apos;, &apos;msg from parent&apos;);</div></pre></td></tr></table></figure>
+<ul>
+<li><p>子组件向父组件传递消息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">// 方法一，二，与父组件向子组件传递消息相似，on与emit反过来就可以</div><div class="line"></div><div class="line">// 方法三，在子组件中</div><div class="line">this.$emit(&apos;parent&apos;, &apos;msg from child&apos;);</div><div class="line">// 方法三，在父组件中. 该方法就是v-model的实现啦</div><div class="line">&lt;child v-on:parent=&apos;handle&apos;&gt;&lt;/child&gt;</div><div class="line">methods.handle = (msg) =&gt; &#123;</div><div class="line">    console.log(msg); &apos;msg from child&apos;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+</li>
+<li><p>使用事件处理代理 emitter</p>
+</li>
+</ul>
+<p>&emsp;&emsp;emitter就是一个事件分发中心，作为消息中介，由emitter来诱发事件，父子组件只需监听就可以了。简单版本，emitter作为组件的一部分；例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">// 父组件监听 parent事件，子组件监听child事件</div><div class="line">parent.$on(&apos;parent&apos;, (msg) =&gt; &#123;&#125;);</div><div class="line">child.$on(&apos;child&apos;, (msg) =&gt; &#123;&#125;);</div><div class="line">// 父组件向子组件通信</div><div class="line">emitter(&apos;child&apos;, &apos;msg from parent&apos;);</div><div class="line">// 子组件向父组件通信</div><div class="line">emitter(&apos;parent&apos;, &apos;msg from child&apos;);</div></pre></td></tr></table></figure></p>
+<p>以上的模式类似于观察者模式，父组件子组件均可以发布和接收消息。如果使用中介者模式的话，emitter作为消息中心，处理消息并返回结果。这就有点像vuex里面的状态管理了。</p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2017/07/17/Vue组件开发初探/">
+    <time datetime="2017-07-17T03:46:31.000Z" class="entry-date">
+        2017-07-17
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+    
+<nav class="nav-single">
+    <h3 class="assistive-text">文章导航</h3>
+    
+    
+        <span class="nav-next"><a href="/2017/07/17/从node-js的http-server来理解jsonp的实现/" rel="next">从node.js的http-server来理解jsonp的实现 <span class="meta-nav">→</span></a></span>
+    
+</nav><!-- .nav-single -->
+
+
+
+
+
+
+
+</div></div>
+        <div id="secondary" class="widget-area" role="complementary">
+  
+    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
+    <div>
+        <input type="text" value="" name="s" id="s" />
+        <input type="submit" id="searchsubmit" value="搜索" />
+    </div>
+</form></aside>
+  
+    
+  
+    
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget-content">
+      <ul>
+        
+          <li>
+            <a href="/2017/07/17/Vue组件开发初探/">Vue组件开发初探</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/17/从node-js的http-server来理解jsonp的实现/">从node.js的http-server来理解jsonp的实现</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/17/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </aside>
+
+  
+    
+  
+    
+  
+</div>
+      </div>
+      <footer id="colophon" role="contentinfo">
+    <p>&copy; 2017 xizhihui
+    All rights reserved.</p>
+    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
+</footer>
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+<script src="/js/navigation.js"></script>
+
+<div id="bg"></div>
+
+  </div>
+</body>
+</html>

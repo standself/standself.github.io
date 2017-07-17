@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <meta name="description" content="things about front-end" />
+  
+
+  
+  
+  
+  
+  
+  
+  <title>从node.js的http-server来理解jsonp的实现 | standself</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="&amp;emsp;&amp;emsp;在上个周末，学习了若愚大大的视频，用node来创建一个mini版的express之后，心想原来前端的请求就是这样被后端处理的;而刚好最近实习期的一个小项目中，使用ajax请求数据却提示有跨域问题；而后，后端小哥再三叮嘱，你一定要在请求时的链接上带上callback，我心想这是什么鬼，应该是要使用jsonp吧。。。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从node.js的http-server来理解jsonp的实现">
+<meta property="og:url" content="http://yoursite.com/2017/07/17/从node-js的http-server来理解jsonp的实现/index.html">
+<meta property="og:site_name" content="standself">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;在上个周末，学习了若愚大大的视频，用node来创建一个mini版的express之后，心想原来前端的请求就是这样被后端处理的;而刚好最近实习期的一个小项目中，使用ajax请求数据却提示有跨域问题；而后，后端小哥再三叮嘱，你一定要在请求时的链接上带上callback，我心想这是什么鬼，应该是要使用jsonp吧。。。">
+<meta property="og:updated_time" content="2017-07-17T03:34:50.099Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从node.js的http-server来理解jsonp的实现">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp;在上个周末，学习了若愚大大的视频，用node来创建一个mini版的express之后，心想原来前端的请求就是这样被后端处理的;而刚好最近实习期的一个小项目中，使用ajax请求数据却提示有跨域问题；而后，后端小哥再三叮嘱，你一定要在请求时的链接上带上callback，我心想这是什么鬼，应该是要使用jsonp吧。。。">
+  
+  
+    <link rel="icon" href="/css/images/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+  
+  <!-- baidu webmaster push -->
+  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+</head>
+<body class="home blog custom-background custom-font-enabled single-author">
+  <div id="page" class="hfeed site">
+      <header id="masthead" class="site-header" role="banner">
+    <hgroup>
+      <h1 class="site-title">
+        <a href="/" title="standself" rel="home">standself</a>
+      </h1>
+      
+        <h2 class="site-description">
+          <a href="/" id="subtitle">To be a better man</a>
+        </h2>
+      
+    </hgroup>
+
+    <nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle">菜单</button>
+            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
+            <div class="menu-main-container">
+                <ul id="menu-main" class="nav-menu">
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
+                
+                </ul>
+            </div>
+    </nav>
+</header>
+      <div id="main" class="wrapper">
+        <div id="primary" class="site-content"><div id="content" role="main"><article id="drafts-从node-js的http-server来理解jsonp的实现" class="drafts-从node-js的http-server来理解jsonp的实现 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title article-title">
+      从node.js的http-server来理解jsonp的实现
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://yoursite.com/2017/07/17/从node-js的http-server来理解jsonp的实现/" data-id="cj57t9i540001y0srjdrl75xu" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>&emsp;&emsp;在上个周末，学习了若愚大大的视频，用node来创建一个mini版的express之后，心想原来前端的请求就是这样被后端处理的;而刚好最近实习期的一个小项目中，使用ajax请求数据却提示有跨域问题；而后，后端小哥再三叮嘱，你一定要在请求时的链接上带上callback，我心想这是什么鬼，应该是要使用jsonp吧。。。</p>
+<a id="more"></a>
+<h3 id="预备小知识-http"><a href="#预备小知识-http" class="headerlink" title="预备小知识-http"></a>预备小知识-http</h3><p>废话不多说，进入正题吧。我们要先了解后端是怎么处理前端发起的请求的。假设前端有一个请求，url为 <a href="http://example.com/index.html" target="_blank" rel="external">http://example.com/index.html</a>, 而服务器地址为 <a href="http://example.com，那么以node.js中http为例，在服务器中的核心代码如下：" target="_blank" rel="external">http://example.com，那么以node.js中http为例，在服务器中的核心代码如下：</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">const http = require(&apos;http&apos;),</div><div class="line">      path = require(&apos;path&apos;),</div><div class="line">      fs = require(&apos;fs&apos;); </div><div class="line"></div><div class="line">http.createServer(function(request, response) &#123;</div><div class="line">    // 注意，这里的request.url 其实就是我们的请求http://example.com/index.html中的后半部分：/index.html</div><div class="line">    let url = request.url;</div><div class="line">    let pathname = path.join(__dirname, url);</div><div class="line">    response.setHeader(&apos;contentType&apos;, &apos;text/html&apos;);</div><div class="line">    fs.readFile(pathname, &apos;binary&apos;, function(err, content) &#123;</div><div class="line">        if (content) &#123;</div><div class="line">            response.writeHead(200, &apos;ok&apos;);</div><div class="line">            response.write(content, &apos;binary&apos;);</div><div class="line">            response.end();</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;).listen(8080);</div><div class="line">console.log(&apos;listening to port:8080...&apos;);</div></pre></td></tr></table></figure></p>
+<p>在请求到达服务器之后，http.createServer的函数参数会被执行一遍，’/index.html’将会被用于读取服务器上的文件index.html（fs.readFile）, 以’binary’形式读取完毕之后，通过response.write函数发送给浏览器，进而完成页面的显示。那么jsonp是在这个基础上如何实现的呢？我们得先看一看为什么会有跨域这一说法。</p>
+<h3 id="同源策略（same-origin"><a href="#同源策略（same-origin" class="headerlink" title="同源策略（same-origin)"></a>同源策略（same-origin)</h3><p>根据MDN上所讲，同源是指如果协议、端口和域名对于两个页面是相同的话，那么这两个页面就属于同源（同域， same origin），反之,则是不同源（跨域，cross-origin）。同源策略是一个用于隔离潜在恶意文件的关键的安全机制，它将对从一个源加载的文档或脚本与来自另一个源的资源之间的可能交互方式进行限制，也就是说它会限制跨域交互的种类。而跨域交互的限制基本可以分为三种：</p>
+<ul>
+<li>跨域写操作(cross-origin writes)是允许的。如link，redirect等, 发起请求的页面地址与link/redirect的链接地址跨域。</li>
+<li>跨域资源嵌入(cross-origin emmbedding)是允许的。</li>
+<li>跨域读操作(cross-origin reads)是不允许的, 但常可以通过内嵌资源来巧妙地进行读取访问。<br>也就是说，要实现跨域资源的读取访问，你可以通过跨域资源的嵌入来实现，也可以通过CORS的方式来实现。MDN也列举了一些方式，如：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;script src=&apos;...&apos;&gt;&lt;/script&gt;嵌入跨域脚本</div><div class="line">&lt;link rel=&apos;styleshee&apos; href=&apos;...&apos;&gt;标签嵌入css.</div><div class="line">&lt;img&gt;嵌入图片</div><div class="line">&lt;video&gt; &lt;audio&gt;嵌入媒体资源</div><div class="line">&lt;object&gt; &lt;embed&gt; &lt;applet&gt; 插件</div><div class="line">@font-face引入字体</div><div class="line">&lt;frame&gt; &lt;iframe&gt;载入的任何资源</div><div class="line">CORS</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>而在本文的重点则是这个嵌入跨域脚本。</p>
+<h3 id="重点的jsonp的实现方式"><a href="#重点的jsonp的实现方式" class="headerlink" title="重点的jsonp的实现方式"></a>重点的jsonp的实现方式</h3><p>以豆瓣为例，在不使用jsonp的情况下，正常ajax请求链接‘<a href="https://api.douban.com/v2/book/4847298’，虽然status" target="_blank" rel="external">https://api.douban.com/v2/book/4847298’，虽然status</a> code 是200，但会得到提示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">XMLHttpRequest cannot load https://api.douban.com/v2/book/4847298. No &apos;Access-Control-Allow-Origin&apos; header is present on the requested resource. Origin &apos;http://cn.bing.com&apos; is therefore not allowed access.</div></pre></td></tr></table></figure></p>
+<p>而在使用jsonp之后，则可以获取到该书本id对应的书名。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var script = document.createElement(&apos;script&apos;);script.src=&apos;https://api.douban.com/v2/book/4847298?callback=logTitle&apos;;</div><div class="line">var logTitle = (data) =&gt; console.log(data.title);</div><div class="line">document.querySelector(&apos;head&apos;).appendChild(script);</div><div class="line">// 页面插入的标签：&lt;script src=​&quot;https:​/​/​api.douban.com/​v2/​book/​4847298?callback=logTitle&quot;&gt;​&lt;/script&gt;​</div><div class="line">// 打印的书名：公路工程预算细节应用入门图解</div></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;我们先要了解的是，在页面添加了&lt;script src=’url’&gt;标签后，页面将会请求url；在加载url指定的资源后，由于是script标签，浏览器将会执行url指定的资源(如xx.js文件).所以，是script标签加载的logTitle(data)的执行打印出的书名。从这里我需要知道，jsonp的原理就是通过script标签执行服务器动态返回的js文件，这也是为何不用img、video等标签的原因。了解这层原理，我们就可以通过node.js的http来进行验证。在node.js创建的服务器核心简单代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">let data = &#123;</div><div class="line">    title: &apos;jsonp的实现原理&apos;;</div><div class="line">&#125;</div><div class="line">http.createServer(function(request, response) &#123;</div><div class="line">    // url = &apos;/index.html?callback=logTitle&apos;;</div><div class="line">    let url =  request.url;</div><div class="line">    let pathname = path.join(__dirname, &apos;index.html&apos;);</div><div class="line">    let callbackName = &apos;logTitle&apos;;</div><div class="line">    response.setHeader(&apos;Access-Control-Allow-Origin&apos;, &apos;http://example.com&apos;); //设置为只允许来自http：//example.com的读取访问</div><div class="line">    if (url.indexOf(callbackName) &gt; -1 ) &#123;</div><div class="line">        response.setHeader(&apos;content-type&apos;, &apos;text/html&apos;);</div><div class="line">        response.writeHead(200, &apos;ok&apos;);</div><div class="line">        response.write(`callbackName($&#123;data&#125;)`);</div><div class="line">        response.end();</div><div class="line">    else &#123;</div><div class="line">        fs.readFile(pathname, &apos;binary&apos;, function(err, content) &#123;</div><div class="line">            if (content) &#123;</div><div class="line">                response.writeHead(200, &apos;ok&apos;);</div><div class="line">                response.write(content, &apos;binary&apos;);</div><div class="line">                response.end();</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy" target="_blank" rel="external">same-origin policy</a></li>
+</ul>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2017/07/17/从node-js的http-server来理解jsonp的实现/">
+    <time datetime="2017-07-17T03:29:15.000Z" class="entry-date">
+        2017-07-17
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+    
+<nav class="nav-single">
+    <h3 class="assistive-text">文章导航</h3>
+    
+        <span class="nav-previous"><a href="/2017/07/17/Vue组件开发初探/" rel="prev"><span class="meta-nav">←</span> Vue组件开发初探</a></span>
+    
+    
+        <span class="nav-next"><a href="/2017/07/17/hello-world/" rel="next">Hello World <span class="meta-nav">→</span></a></span>
+    
+</nav><!-- .nav-single -->
+
+
+
+
+
+
+
+</div></div>
+        <div id="secondary" class="widget-area" role="complementary">
+  
+    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
+    <div>
+        <input type="text" value="" name="s" id="s" />
+        <input type="submit" id="searchsubmit" value="搜索" />
+    </div>
+</form></aside>
+  
+    
+  
+    
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget-content">
+      <ul>
+        
+          <li>
+            <a href="/2017/07/17/Vue组件开发初探/">Vue组件开发初探</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/17/从node-js的http-server来理解jsonp的实现/">从node.js的http-server来理解jsonp的实现</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/17/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </aside>
+
+  
+    
+  
+    
+  
+</div>
+      </div>
+      <footer id="colophon" role="contentinfo">
+    <p>&copy; 2017 xizhihui
+    All rights reserved.</p>
+    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
+</footer>
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+<script src="/js/navigation.js"></script>
+
+<div id="bg"></div>
+
+  </div>
+</body>
+</html>
