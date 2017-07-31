@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <meta name="description" content="things about front-end" />
+  
+
+  
+  
+  
+  
+  
+  
+  <title>&#39;你的shuffle真的shuffle数组了吗？&#39; | standself</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="&amp;emsp;&amp;emsp;以前在看别人的一个cli源码时，发现上面使用的shuffle函数甚是简洁，仅仅只有不到5行代码；当时我就惊呼，竟然还有这样的操作，将作者视为天人——真尼玛厉害，要知道，我自己写个shuffle函数可是需要很多行代码的(具体多少行就不透露了。。。)。然而，这些天在多次使用该shuffle函数时，我才发现，事实似乎不是那样。">
+<meta name="keywords" content="JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="&#39;你的shuffle真的shuffle数组了吗？&#39;">
+<meta property="og:url" content="http://yoursite.com/2017/07/31/你的shuffle真的shuffle数组了吗？/index.html">
+<meta property="og:site_name" content="standself">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;以前在看别人的一个cli源码时，发现上面使用的shuffle函数甚是简洁，仅仅只有不到5行代码；当时我就惊呼，竟然还有这样的操作，将作者视为天人——真尼玛厉害，要知道，我自己写个shuffle函数可是需要很多行代码的(具体多少行就不透露了。。。)。然而，这些天在多次使用该shuffle函数时，我才发现，事实似乎不是那样。">
+<meta property="og:updated_time" content="2017-07-31T02:16:22.205Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="&#39;你的shuffle真的shuffle数组了吗？&#39;">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp;以前在看别人的一个cli源码时，发现上面使用的shuffle函数甚是简洁，仅仅只有不到5行代码；当时我就惊呼，竟然还有这样的操作，将作者视为天人——真尼玛厉害，要知道，我自己写个shuffle函数可是需要很多行代码的(具体多少行就不透露了。。。)。然而，这些天在多次使用该shuffle函数时，我才发现，事实似乎不是那样。">
+  
+  
+    <link rel="icon" href="/css/images/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+  
+  <!-- baidu webmaster push -->
+  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+</head>
+<body class="home blog custom-background custom-font-enabled single-author">
+  <div id="page" class="hfeed site">
+      <header id="masthead" class="site-header" role="banner">
+    <hgroup>
+      <h1 class="site-title">
+        <a href="/" title="standself" rel="home">standself</a>
+      </h1>
+      
+        <h2 class="site-description">
+          <a href="/" id="subtitle">To be a better man</a>
+        </h2>
+      
+    </hgroup>
+
+    <nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle">菜单</button>
+            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
+            <div class="menu-main-container">
+                <ul id="menu-main" class="nav-menu">
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
+                
+                </ul>
+            </div>
+    </nav>
+</header>
+      <div id="main" class="wrapper">
+        <div id="primary" class="site-content"><div id="content" role="main"><article id="post-你的shuffle真的shuffle数组了吗？" class="post-你的shuffle真的shuffle数组了吗？ post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title article-title">
+      &#39;你的shuffle真的shuffle数组了吗？&#39;
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://yoursite.com/2017/07/31/你的shuffle真的shuffle数组了吗？/" data-id="cj5rixems0000kgsrkbhbggg6" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>&emsp;&emsp;以前在看别人的一个cli源码时，发现上面使用的shuffle函数甚是简洁，仅仅只有不到5行代码；当时我就惊呼，竟然还有这样的操作，将作者视为天人——真尼玛厉害，要知道，我自己写个shuffle函数可是需要很多行代码的(具体多少行就不透露了。。。)。然而，这些天在多次使用该shuffle函数时，我才发现，事实似乎不是那样。<br><a id="more"></a></p>
+<h3 id="shuffle-random"><a href="#shuffle-random" class="headerlink" title="shuffle? random?"></a>shuffle? random?</h3><p>&emsp;&emsp;众所周知，shuffle函数的作用是随机打乱一个数组，返回打乱后的数组。既然是随机，肯定要用到Math.random()来随机获取数组的元素。但是，在前面提到的cli中的shuffle函数却异常简洁，具体可以参看其代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function shuffle(array) &#123;</div><div class="line">    return array.sort(function() &#123;</div><div class="line">        return Math.random() &gt;= 0.5;</div><div class="line">    &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>真是十分简洁，加上函数名和括号等等，才五行代码。但是，这样的shuffle函数真的能奏效吗？果真如此的话，网上广泛流传的面试宝典怎么没有这个函数？为了验证其有效性，我进行了测试，思路如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">var array = [0, 1, 2, 3, 4, 5],</div><div class="line">    counts = [</div><div class="line">        // 存储arr中各元素的出现次数</div><div class="line">        [0, 0, 0, 0, 0, 0],</div><div class="line">        [0, 0, 0, 0, 0, 0],</div><div class="line">        [0, 0, 0, 0, 0, 0],</div><div class="line">        [0, 0, 0, 0, 0, 0],</div><div class="line">        [0, 0, 0, 0, 0, 0],</div><div class="line">        [0, 0, 0, 0, 0, 0],</div><div class="line">    ]</div><div class="line">for (var i = 0; i &lt; 10000; i++) &#123;</div><div class="line">    var temp = array.slice();</div><div class="line">    temp = shuffle(temp)</div><div class="line">    temp.forEach(function(item, index) &#123;</div><div class="line">        counts[index][item]++</div><div class="line">    &#125;)</div><div class="line">&#125;</div><div class="line">console.log(counts)</div><div class="line">/*</div><div class="line">  [3013, 2989, 1961, 1110, 565, 362],</div><div class="line">  [3041, 3014, 1938, 1094, 614, 299],</div><div class="line">  [1950, 1962, 2466, 1851, 1152, 619],</div><div class="line">  [1126, 1128, 1863, 2635, 2022, 1226],</div><div class="line">  [569, 596, 1123, 2077, 3114, 2521],</div><div class="line">  [301, 311, 649, 1233, 2533, 4973]</div><div class="line">*/</div></pre></td></tr></table></figure></p>
+<p>从上面的打印counts结果我们可以看出，在index=0的位置，出现0,1,2,的几率分别为3013,2989,1961，而3,4,5出现的几率为1110,565,362；而在index=5的位置，恰好相反。那就说明，使用上述的shuffle函数进行打乱数组的话，在数组前面的元素更容易出现打乱后数组的前面；而在后面的数据更容易出现打乱后数组的后面。那究其原因是什么呢？下面，我将从我的理解来进行解释。</p>
+<h3 id="数组打乱？你学过排列组合吧？经典随shuffle机算法？"><a href="#数组打乱？你学过排列组合吧？经典随shuffle机算法？" class="headerlink" title="数组打乱？你学过排列组合吧？经典随shuffle机算法？"></a>数组打乱？你学过排列组合吧？经典随shuffle机算法？</h3><p>&emsp;&emsp;仍记得高中时，算那些排列组合的日子，真把人算懵逼了，没想到这会又想起来了。且听我道来它与数组打乱之间的关系（重点！重点！敲黑板）。</p>
+<blockquote>
+<p>当我们要把数组打乱时，其实我们可以把array中的这6个元素进行排列组合，因为数组是有index的，也就是说我们要选择排列。对于有6个元素的排列来讲，排列的结果个数为 6！。而接下来我们要做的就是，从这 6！个排列结果中随机取一个结果返回，那不就是打乱后的数组吗？<br>那么具体的实现思路是这样的，把array里面的元素都拿出来放到temp里面去，这时候我们的思路就是：取一个元素，然后在array里面随机选一个位置放好；再取一个元素，然后在array里面剩余的位置再选一个；如此往复，周而复始，子子孙孙无穷尽也~~~（写到这里，我才发现，这不就是我刚学编程的shuffle函数思路吗？没错，不忘初心，放得始终啊。）。当我们全部放完以后，这array就是 6！个排列结果中的一个。由于我们只需要一个排列结果，此时的array就是打乱后的数组。在我考虑完这些以后，发现有一篇博客也讲到这些，还讲到了一个经典的随机算法（见参考1），其思路其实和上面讲的那些一样。其代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">function shuffle(arr)&#123;</div><div class="line">  var len = arr.length;</div><div class="line">  for(var i = 0; i &lt; len - 1; i++)&#123;</div><div class="line">    var idx = Math.floor(Math.random() * (len - i));</div><div class="line">    var temp = arr[idx];</div><div class="line">    arr[idx] = arr[len - i - 1];</div><div class="line">    arr[len - i -1] = temp;</div><div class="line">  &#125;</div><div class="line">  return arr;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>他的思路是：每一次循环从前 len - i 个元素里随机一个位置，将这个元素和第 len - i 个元素进行交换，迭代直到 i = len - 1 为止。每次固定第len-i位置的元素，然后再到剩余位置中随机选一个位置固定。看到这里，underscore.js里面也是用的这种思路，相比于我自己实现的话，他们这样完全避免了我要考虑的剩余位置有哪些的问题，因为每次循环后，都会把没打乱的元素和其他元素放到一起再进行打乱。下面是undersocre.js的实现：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">  _.sample = function(obj, n, guard) &#123;</div><div class="line">    if (n == null || guard) &#123;</div><div class="line">      if (!isArrayLike(obj)) obj = _.values(obj);</div><div class="line">      return obj[_.random(obj.length - 1)];</div><div class="line">    &#125;</div><div class="line">    var sample = isArrayLike(obj) ? _.clone(obj) : _.values(obj);</div><div class="line">    var length = getLength(sample);</div><div class="line">    n = Math.max(Math.min(n, length), 0);</div><div class="line">    var last = length - 1;</div><div class="line">    for (var index = 0; index &lt; n; index++) &#123;</div><div class="line">      var rand = _.random(index, last);</div><div class="line">      var temp = sample[index];</div><div class="line">      sample[index] = sample[rand]; </div><div class="line">      sample[rand] = temp;</div><div class="line">    &#125;</div><div class="line">    return sample.slice(0, n);</div><div class="line">  &#125;;</div><div class="line">_.shuffle = _.sample(obj, Infinity)</div></pre></td></tr></table></figure></p>
+<h3 id="为何Math-random-gt-0-5不行？"><a href="#为何Math-random-gt-0-5不行？" class="headerlink" title="为何Math.random() &gt;= 0.5不行？"></a>为何Math.random() &gt;= 0.5不行？</h3><p>&emsp;&emsp;对于array中的每个位置index来讲，就只有2种可能index和index+1。也就是说array中有6个元素的话，最多的结果个数也就是 2^6 个，我们获取到的打乱后数组就是其中一个。相比6！和2^6来讲，肯定是6！大。但是，简单点讲，sort的每个元素被比较的平均次数乘以2^6才是使用Math.random() &gt;= 0.5进行打乱的总结果数；而各浏览器的sort不尽相同，将会导致打乱的紊乱水平也不一致，亦即随机打乱不随机。</p>
+<h3 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h3><p>&emsp;&emsp;有时候，有些东西虽然看着简单，却不一定正确。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="https://www.h5jun.com/post/array-shuffle.html" target="_blank" rel="external">数组的完全随机排列</a></p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2017/07/31/你的shuffle真的shuffle数组了吗？/">
+    <time datetime="2017-07-31T02:16:22.000Z" class="entry-date">
+        2017-07-31
+    </time>
+</a>
+    
+    
+  <span class="article-delim">&#8226;</span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+
+    </footer>
+</article>
+
+
+    
+<nav class="nav-single">
+    <h3 class="assistive-text">文章导航</h3>
+    
+    
+        <span class="nav-next"><a href="/2017/07/17/Vue组件开发初探/" rel="next">Vue组件开发初探 <span class="meta-nav">→</span></a></span>
+    
+</nav><!-- .nav-single -->
+
+
+
+
+
+
+
+</div></div>
+        <div id="secondary" class="widget-area" role="complementary">
+  
+    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
+    <div>
+        <input type="text" value="" name="s" id="s" />
+        <input type="submit" id="searchsubmit" value="搜索" />
+    </div>
+</form></aside>
+  
+    
+  
+    
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget-content">
+      <ul>
+        
+          <li>
+            <a href="/2017/07/31/你的shuffle真的shuffle数组了吗？/">&#39;你的shuffle真的shuffle数组了吗？&#39;</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/17/Vue组件开发初探/">Vue组件开发初探</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/17/从node-js的http-server来理解jsonp的实现/">从node.js的http-server来理解jsonp的实现</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/17/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-content">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/">JavaScript</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-content tagcloud">
+      <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a>
+    </div>
+  </aside>
+
+  
+</div>
+      </div>
+      <footer id="colophon" role="contentinfo">
+    <p>&copy; 2017 xizhihui
+    All rights reserved.</p>
+    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
+</footer>
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+<script src="/js/navigation.js"></script>
+
+<div id="bg"></div>
+
+  </div>
+</body>
+</html>
